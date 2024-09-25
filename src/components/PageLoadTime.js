@@ -1,25 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
 
 const PageLoadTime = () => {
-  const [PageLoadTime, setPageLoadTime] = useState(0);
+  const [loadTime, setLoadTime] = useState(0);
 
   useEffect(() => {
-    const startTime = Date.now();
-
-    window.addEventListener('load', () => {
-      const endTime = Date.now();
-      const loadDuration = (endTime - startTime) / 1000; // Change to second
-      setPageLoadTime(loadDuration.toFixed(3)); // Formatting to 4 decimal places
-    });
-
-    return () => window.removeEventListener('load', () => {});
+    const startTime = performance.timing.navigationStart;
+    const endTime = performance.timing.loadEventEnd;
+    const loadTimeInSeconds = (endTime - startTime) / 1000;
+    setLoadTime(loadTimeInSeconds);
   }, []);
 
-  return (
-    <div>
-      <h1>The page load time: {PageLoadTime} sec</h1>
-    </div>
-  );
+  return <Box mb={2}>Page load time: {loadTime.toFixed(3)} seconds</Box>;
 };
 
 export default PageLoadTime;
